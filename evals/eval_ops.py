@@ -27,6 +27,7 @@ def evaluate_operations_and_economics() -> Dict[str, Any]:
     - Time-to-First-Token (TTFT) via token streaming
     - Cost per query & cost per 1k queries based on input/output tokens
     - Availability & Error Rate
+    - Built-in retry & backoff to prevent transient Groq OTPM rate limits
     """
     rag = FinSecureRAG(top_k=3)
     with open(BENCHMARK_FILE, "r", encoding="utf-8") as f:
@@ -42,41 +43,59 @@ def evaluate_operations_and_economics() -> Dict[str, Any]:
 
     for item in benchmarks:
         query = item["query"]
-        try:
-            # Measure TTFT via stream
-            retrieved_docs = rag.retriever.retrieve(query, top_k=3)
-            stream_start = time.time()
-            ttft = None
-            full_response = []
-            
-            for chunk in rag.generator.stream_generate(query, retrieved_docs):
-                if ttft is None and chunk:
-                    ttft = time.time() - stream_start
-                full_response.append(chunk)
+        success = False
+        max_attempts = 4
 
-            total_latency = time.time() - stream_start
-            answer_text = "".join(full_response)
+        for attempt in range(max_attempts):
+            try:
+                # Pause slightly between benchmark queries to respect Groq OTPM limits
+                time.sleep(2.0)
+                
+                # Measure TTFT via stream
+                retrieved_docs = rag.retriever.retrieve(query, top_k=3)
+                stream_start = time.time()
+                ttft = None
+                full_response = []
+                
+                for chunk in rag.generator.stream_generate(query, retrieved_docs):
+                    if ttft is None and chunk:
+                        ttft = time.time() - stream_start
+                    full_response.append(chunk)
 
-            # Context size tokens + prompt overhead
-            ctx_text = " ".join([d["page_content"] for d in retrieved_docs])
-            in_tokens = estimate_tokens(query + ctx_text) + 150 # system prompt overhead
-            out_tokens = estimate_tokens(answer_text)
+                total_latency = time.time() - stream_start
+                answer_text = "".join(full_response)
 
-            latencies.append(total_latency)
-            ttfts.append(ttft or total_latency)
-            input_tokens_list.append(in_tokens)
-            output_tokens_list.append(out_tokens)
+                # Context size tokens + prompt overhead
+                ctx_text = " ".join([d["page_content"] for d in retrieved_docs])
+                in_tokens = estimate_tokens(query + ctx_text) + 150 # system prompt overhead
+                out_tokens = estimate_tokens(answer_text)
 
-            detailed_runs.append({
-                "id": item["id"],
-                "query": query,
-                "latency_sec": round(total_latency, 3),
-                "ttft_sec": round(ttft or total_latency, 3),
-                "input_tokens": in_tokens,
-                "output_tokens": out_tokens
-            })
-        except Exception as e:
-            print(f"[!] Operation benchmark failed for {item['id']}: {e}")
+                latencies.append(total_latency)
+                ttfts.append(ttft or total_latency)
+                input_tokens_list.append(in_tokens)
+                output_tokens_list.append(out_tokens)
+
+                detailed_runs.append({
+                    "id": item["id"],
+                    "query": query,
+                    "latency_sec": round(total_latency, 3),
+                    "ttft_sec": round(ttft or total_latency, 3),
+                    "input_tokens": in_tokens,
+                    "output_tokens": out_tokens
+                })
+                success = True
+                break
+            except Exception as e:
+                err_str = str(e)
+                if "429" in err_str or "rate_limit" in err_str.lower():
+                    wait_sec = 6.0 * (attempt + 1)
+                    print(f"[!] Groq rate limit encountered during {item['id']}. Waiting {wait_sec}s before retry ({attempt+1}/{max_attempts})...")
+                    time.sleep(wait_sec)
+                else:
+                    print(f"[!] Operation benchmark failed for {item['id']}: {e}")
+                    time.sleep(3.0)
+
+        if not success:
             failures += 1
 
     total_runs = len(latencies)
