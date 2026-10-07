@@ -1,0 +1,32 @@
+[
+  {
+    "id": "triad_001",
+    "query": "What are NVIDIA's gross margin figures and fiscal Q4 margin outlook?",
+    "company": "NVIDIA",
+    "expected_answer": "NVIDIA GAAP gross margin was 74.6% and non-GAAP was 75.1% in Q3. For Q4 FY25, gross margins are expected to be 73.0% GAAP and 73.5% non-GAAP, plus or minus 50 basis points, before rebounding to the mid-70s later in the year."
+  },
+  {
+    "id": "triad_002",
+    "query": "What was Apple's active installed base and shareholder return during Q4 FY24?",
+    "company": "Apple",
+    "expected_answer": "Apple's active installed base reached an all-time high across all products and geographic segments. Apple returned over $29 billion to shareholders during the quarter, including $3.8 billion in dividends and $25 billion in share repurchases."
+  },
+  {
+    "id": "triad_003",
+    "query": "How did Microsoft Cloud perform in revenue and gross margin?",
+    "company": "Microsoft",
+    "expected_answer": "Microsoft Cloud revenue was $38.9 billion, up 22% year-over-year. Microsoft Cloud gross margin percentage was 71%, down slightly due to the scaling of AI infrastructure."
+  },
+  {
+    "id": "triad_004",
+    "query": "What details were provided on NVIDIA Networking revenue growth?",
+    "company": "NVIDIA",
+    "expected_answer": "Networking revenue was $3.12 billion, up 20% year-over-year, driven by strong demand for InfiniBand and Spectrum-X Ethernet networking platforms."
+  },
+  {
+    "id": "triad_005",
+    "query": "What were Apple's Mac and iPad revenues in Q4 fiscal 2024?",
+    "company": "Apple",
+    "expected_answer": "Mac revenue was $7.74 billion, up 2% year-over-year propelled by M3 MacBook Air. iPad revenue was $6.95 billion, up 8% year-over-year driven by the updated iPad Air and iPad Pro."
+  }
+]

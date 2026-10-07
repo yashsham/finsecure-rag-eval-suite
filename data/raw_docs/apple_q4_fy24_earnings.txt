@@ -1,0 +1,34 @@
+APPLE INC. (AAPL) - Q4 FISCAL 2024 CONSOLIDATED FINANCIALS & EARNINGS CALL
+Date: October 31, 2024
+Executives:
+- Tim Cook, Chief Executive Officer
+- Luca Maestri, Senior Vice President and Chief Financial Officer
+
+FINANCIAL HIGHLIGHTS & PREPARED REMARKS:
+Luca Maestri:
+"Good afternoon. Apple is reporting revenue of $94.9 billion for our September quarter of fiscal 2024, up 6% year-over-year.
+Products revenue was $69.96 billion, up 4% year-over-year.
+Within Products:
+- iPhone revenue set a September quarter record of $46.22 billion, up 6% year-over-year, buoyed by the initial launch of the iPhone 16 family.
+- Mac revenue was $7.74 billion, up 2% year-over-year, propelled by M3-powered MacBook Air models.
+- iPad revenue was $6.95 billion, up 8% year-over-year, driven by the updated iPad Air and iPad Pro with M4.
+- Wearables, Home, and Accessories revenue was $9.04 billion, down 3% year-over-year due to difficult compares against prior watch launches.
+
+Services revenue achieved an all-time record of $24.97 billion, growing 12% year-over-year, with double-digit growth across App Store, Cloud, Apple Pay, and Apple Music. Paid subscriptions surpassed 1 billion accounts.
+
+Company gross margin was 46.2%, at the high end of our guidance. Products gross margin was 36.3%, and Services gross margin was 74.0%.
+Operating expenses were $14.3 billion. Net income was $14.74 billion, impacted by a one-time European General Court tax charge of $10.2 billion. Diluted earnings per share was $0.97. Excluding the one-time tax charge, adjusted diluted EPS was $1.64, up 12% year-over-year.
+Operating cash flow generated was $26.8 billion. We returned over $29 billion to shareholders through dividends and share buybacks.
+
+GUIDANCE FOR Q1 FISCAL 2025:
+We expect total company revenue to grow low-to-mid single digits year-over-year.
+Services revenue is expected to grow at a similar double-digit rate as fiscal 2024.
+Gross margin is anticipated to be between 46.0% and 47.0%.
+Operating expenses are projected between $15.3 billion and $15.5 billion.
+
+EXECUTIVE Q&A SESSION:
+Analyst (Wamsi Mohan, Bank of America): "Tim, can you talk about consumer reception to Apple Intelligence and whether it is driving a noticeable super-cycle upgrade for iPhone 16?"
+Tim Cook: "Wamsi, customer feedback for Apple Intelligence in iOS 18.1 has been outstanding. In regions where Apple Intelligence features rolled out (Writing Tools, Clean Up in Photos, Notification Summaries), adoption is tracking significantly faster than iOS 17.1 during the comparable period last year. It is early in the rollout with Genmoji, Image Playground, and ChatGPT Siri integration arriving in iOS 18.2, but the developer momentum and enthusiasm are extraordinary."
+
+Analyst (Toni Sacconaghi, Bernstein): "Luca, regarding Greater China revenue, it was down slightly to $15.03 billion compared to $15.08 billion last year. How do you view competitive pressure from local handset makers like Huawei?"
+Luca Maestri: "Toni, on a constant-currency basis, Greater China revenue was flat year-over-year. More importantly, the installed base of active iPhones reached an all-time high in mainland China. We continue to see high switcher rates and high satisfaction ratings among Chinese consumers."

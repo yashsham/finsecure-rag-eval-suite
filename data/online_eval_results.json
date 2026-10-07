@@ -1,0 +1,18 @@
+[
+  {
+    "timestamp": "2026-10-08T01:12:55.945799",
+    "input": "What was Apple Services revenue in Q4?",
+    "output": "Apple Services revenue reached an all-time record of $24.97 billion, up 12% year-over-year.",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "flagged_for_human_review": false
+  },
+  {
+    "timestamp": "2026-10-08T01:35:14.528655",
+    "input": "What was Apple Services revenue in Q4?",
+    "output": "Apple Services revenue reached an all-time record of $24.97 billion, up 12% year-over-year.",
+    "faithfulness": 1.0,
+    "relevancy": 1.0,
+    "flagged_for_human_review": false
+  }
+]

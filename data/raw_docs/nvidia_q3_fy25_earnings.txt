@@ -1,0 +1,33 @@
+NVIDIA CORPORATION (NVDA) - Q3 FISCAL 2025 EARNINGS CONFERENCE CALL
+Date: November 20, 2024
+Executives:
+- Jensen Huang, Founder and Chief Executive Officer
+- Colette Kress, Executive Vice President and Chief Financial Officer
+
+FINANCIAL HIGHLIGHTS & PREPARED REMARKS:
+Colette Kress:
+"Good afternoon, everyone. NVIDIA reported record revenue for the third quarter of fiscal 2025 of $35.1 billion, up 17% sequentially and up 94% from a year ago.
+Data Center revenue was a record $30.8 billion, up 17% sequentially and up 112% year-on-year. Growth was driven by unprecedented demand for the NVIDIA Hopper computing platform, including H100 and H200 systems, as well as early shipments of our Blackwell architecture.
+Networking revenue was $3.12 billion, up 20% sequentially, powered by Quantum InfiniBand and our new Spectrum-X Ethernet platform tailored for generative AI clusters.
+Gaming revenue was $3.3 billion, up 15% year-on-year, driven by GeForce RTX 40 Series GPUs.
+Professional Visualization revenue was $486 million, up 17% year-on-year.
+Automotive revenue reached a record $449 million, up 72% year-on-year, driven by self-driving platforms and robotics partnerships.
+
+GAAP gross margin for the quarter was 74.6%, and non-GAAP gross margin was 75.1%.
+Operating expenses were $4.29 billion GAAP and $3.05 billion non-GAAP.
+Net income reached $19.3 billion GAAP, representing a diluted EPS of $0.78. Non-GAAP diluted EPS was $0.81.
+Cash and cash equivalents, including marketable securities, stood at $38.5 billion.
+
+OUTLOOK & GUIDANCE FOR Q4 FISCAL 2025:
+Revenue is expected to be $37.5 billion, plus or minus 2%.
+GAAP and non-GAAP gross margins are expected to be 73.0% and 73.5%, respectively, plus or minus 50 basis points.
+We anticipate Blackwell production shipments to begin in Q4 and ramp into fiscal 2026. Because Blackwell requires new packaging techniques and initial ramp costs, gross margins in Q4 will see a temporary slight dip into the low 70s before recovering to the mid-70s later in fiscal 2026.
+Full-year operating expenses are expected to grow in the mid-40% range.
+Capital expenditures for Q3 were approximately $1.1 billion.
+
+EXECUTIVE Q&A SESSION:
+Analyst (Toshiya Hari, Goldman Sachs): "Jensen, can you address the demand trajectory and supply constraints for Blackwell? There have been rumors regarding overheating and engineering redesigns in NVL72 racks."
+Jensen Huang: "Blackwell is in full production. We delivered our first customer samples in Q3, and we will ship more Blackwells this quarter than previously estimated. Demand for Blackwell is staggering; cloud service providers, sovereign AI nations, and enterprise hyperscalers are racing to build out infrastructure. Regarding server rack thermal design: Blackwell is a 208-billion transistor dual-die chip pulling up to 1,200 watts. We have engineered liquid cooling solutions across 100+ ecosystem partners. There are no fundamental thermal defects in our silicon or packaging. Every Blackwell chip we make over the next several quarters is completely sold out."
+
+Analyst (Stacy Rasgon, Bernstein): "Colette, on gross margins, why the guidance decline to 73.5% in Q4, and when do we see margins returning to 75%?"
+Colette Kress: "Stacy, as we transition from mature Hopper yields to brand-new Blackwell yields with complex CoWoS-L packaging, ramp-up scrap and component costs naturally press on margins. Once Blackwell reaches high-volume production in the second half of fiscal 2026, we expect gross margins to stabilize back into the mid-75% range."

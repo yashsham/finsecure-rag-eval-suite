@@ -1,0 +1,32 @@
+[
+  {
+    "id": "qual_001",
+    "query": "Compare the AI infrastructure and cloud growth metrics between NVIDIA, Microsoft, and Apple as reported in their earnings.",
+    "ideal_target": "NVIDIA Data Center grew 112% to $30.8B fueled by Hopper and Blackwell. Microsoft Azure grew 33% with 12 points directly from AI services, committing $20B in Capex. Apple focused on on-device Apple Intelligence rolled out with iOS 18.1 with adoption double that of iOS 17.1.",
+    "evaluation_criteria": {
+      "correctness": "Accurately quotes numbers for NVDA Data Center ($30.8B, 112%), MSFT Azure (+33%, 12 pts AI, $20B Capex), and AAPL AI strategy.",
+      "completeness": "Covers all three companies without omissions.",
+      "professional_tone": "Neutral, objective financial analysis without hype."
+    }
+  },
+  {
+    "id": "qual_002",
+    "query": "What are the primary operational risk factors and capacity bottlenecks mentioned by Microsoft and NVIDIA?",
+    "ideal_target": "Microsoft reported cloud demand exceeds available capacity, expecting constraints through the first half of FY25. NVIDIA cited that Blackwell demand is staggering and customer demand exceeds supply as production ramps into FY26.",
+    "evaluation_criteria": {
+      "correctness": "Directly references Microsoft's first half capacity constraints and NVIDIA's Blackwell demand exceeding supply.",
+      "completeness": "Addresses both Microsoft and NVIDIA bottleneck statements.",
+      "professional_tone": "Formal risk assessment format."
+    }
+  },
+  {
+    "id": "qual_003",
+    "query": "Explain Apple's capital return program and dividend payouts in Q4 FY24.",
+    "ideal_target": "Apple returned over $29 billion to shareholders in Q4 FY24, which consisted of $3.8 billion in dividends and equivalents and $25 billion in open market share repurchases.",
+    "evaluation_criteria": {
+      "correctness": "$29B total, $3.8B dividends, $25B buybacks.",
+      "completeness": "Specifies both dividend and repurchase breakdown.",
+      "professional_tone": "Concise and authoritative financial reporting."
+    }
+  }
+]

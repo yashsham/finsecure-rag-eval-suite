@@ -1,0 +1,31 @@
+# Python & Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+ENV/
+
+# Environment Variables & Secrets (CRITICAL)
+.env
+.env.*
+!.env.example
+
+# Local Data / Vector DBs (Large binaries)
+data/chroma_db/
+*.sqlite3
+*.db
+
+# Node / Cloudflare Wrangler build artifacts
+node_modules/
+.wrangler/
+dist/
+
+# IDE & OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

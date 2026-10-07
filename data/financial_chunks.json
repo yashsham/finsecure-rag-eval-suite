@@ -1,0 +1,122 @@
+[
+  {
+    "text": "APPLE INC. (AAPL) - Q4 FISCAL 2024 CONSOLIDATED FINANCIALS & EARNINGS CALL\nDate: October 31, 2024\nExecutives:\n- Tim Cook, Chief Executive Officer\n- Luca Maestri, Senior Vice President and Chief Financial Officer",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "FINANCIAL HIGHLIGHTS & PREPARED REMARKS:\nLuca Maestri:\n\"Good afternoon. Apple is reporting revenue of $94.9 billion for our September quarter of fiscal 2024, up 6% year-over-year.\nProducts revenue was $69.96 billion, up 4% year-over-year.\nWithin Products:\n- iPhone revenue set a September quarter record of $46.22 billion, up 6% year-over-year, buoyed by the initial launch of the iPhone 16 family.\n- Mac revenue was $7.74 billion, up 2% year-over-year, propelled by M3-powered MacBook Air models.\n- iPad revenue was $6.95 billion, up 8% year-over-year, driven by the updated iPad Air and iPad Pro with M4.\n- Wearables, Home, and Accessories revenue was $9.04 billion, down 3% year-over-year due to difficult compares against prior watch launches.",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "Services revenue achieved an all-time record of $24.97 billion, growing 12% year-over-year, with double-digit growth across App Store, Cloud, Apple Pay, and Apple Music. Paid subscriptions surpassed 1 billion accounts.",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "Company gross margin was 46.2%, at the high end of our guidance. Products gross margin was 36.3%, and Services gross margin was 74.0%.\nOperating expenses were $14.3 billion. Net income was $14.74 billion, impacted by a one-time European General Court tax charge of $10.2 billion. Diluted earnings per share was $0.97. Excluding the one-time tax charge, adjusted diluted EPS was $1.64, up 12% year-over-year.\nOperating cash flow generated was $26.8 billion. We returned over $29 billion to shareholders through dividends and share buybacks.",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "GUIDANCE FOR Q1 FISCAL 2025:\nWe expect total company revenue to grow low-to-mid single digits year-over-year.\nServices revenue is expected to grow at a similar double-digit rate as fiscal 2024.\nGross margin is anticipated to be between 46.0% and 47.0%.\nOperating expenses are projected between $15.3 billion and $15.5 billion.",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "EXECUTIVE Q&A SESSION:\nAnalyst (Wamsi Mohan, Bank of America): \"Tim, can you talk about consumer reception to Apple Intelligence and whether it is driving a noticeable super-cycle upgrade for iPhone 16?\"\nTim Cook: \"Wamsi, customer feedback for Apple Intelligence in iOS 18.1 has been outstanding. In regions where Apple Intelligence features rolled out (Writing Tools, Clean Up in Photos, Notification Summaries), adoption is tracking significantly faster than iOS 17.1 during the comparable period last year. It is early in the rollout with Genmoji, Image Playground, and ChatGPT Siri integration arriving in iOS 18.2, but the developer momentum and enthusiasm are extraordinary.\"",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "Analyst (Toni Sacconaghi, Bernstein): \"Luca, regarding Greater China revenue, it was down slightly to $15.03 billion compared to $15.08 billion last year. How do you view competitive pressure from local handset makers like Huawei?\"\nLuca Maestri: \"Toni, on a constant-currency basis, Greater China revenue was flat year-over-year. More importantly, the installed base of active iPhones reached an all-time high in mainland China. We continue to see high switcher rates and high satisfaction ratings among Chinese consumers.\"",
+    "company": "Apple",
+    "ticker": "AAPL",
+    "source": "data/raw_docs/apple_q4_fy24_earnings.txt"
+  },
+  {
+    "text": "MICROSOFT CORPORATION (MSFT) - Q1 FISCAL 2025 FINANCIAL RESULTS & EARNINGS CALL\nDate: October 30, 2024\nExecutives:\n- Satya Nadella, Chairman and Chief Executive Officer\n- Amy Hood, Executive Vice President and Chief Financial Officer",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "FINANCIAL HIGHLIGHTS & PREPARED REMARKS:\nAmy Hood:\n\"Good day. For the first quarter of fiscal 2025, Microsoft delivered revenue of $65.6 billion, up 16% year-over-year.\nOperating income was $30.6 billion, up 14% year-over-year.\nNet income was $24.7 billion, and diluted earnings per share was $3.30, an increase of 10%.",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "Segment Breakdown:\n1. Productivity and Business Processes revenue was $28.3 billion, up 12%. Office 365 Commercial revenue grew 15%, driven by E5 expansions and early Microsoft 365 Copilot seat activations. LinkedIn revenue grew 10%.\n2. Intelligent Cloud revenue was $24.1 billion, up 20%. Azure and other cloud services revenue grew 33%, with 12 points of growth coming directly from AI services demand.\n3. More Personal Computing revenue was $13.2 billion, up 17%. Windows OEM and commercial revenue grew 2%, and Xbox content and services revenue grew 61%, largely due to the net impact of the Activision Blizzard acquisition.",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "CAPITAL EXPENDITURES & AI INFRASTRUCTURE:\nCapital expenditures including finance leases were $20.0 billion, with cash paid for property, plant, and equipment of $14.9 billion. Roughly half of our cloud capex was spent on long-lived assets, including data center land, power build-outs, and fiber that will monetize over 15+ years. The remaining half was allocated to servers, GPUs, and network switches directly matching customer demand curves.\nOperating cash flow was $34.2 billion, up 12%. Free cash flow was $19.3 billion.",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "OUTLOOK & GUIDANCE FOR Q2 FISCAL 2025:\nIntelligent Cloud revenue is guided to $25.55 billion to $25.85 billion, representing 18% to 20% growth. Azure growth in Q2 is expected to be between 31% and 32% in constant currency.\nWe expect cloud supply constraints to persist through the first half of the fiscal year, with capacity improving in the second half as new third-party and internal data centers go live.\nCapex will increase sequentially as we invest in AI cloud infrastructure.",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "EXECUTIVE Q&A SESSION:\nAnalyst (Brent Thill, Jefferies): \"Satya, can you update us on GitHub Copilot and M365 Copilot enterprise monetization? What percentage of Fortune 500 customers are actively deploying Copilot?\"\nSatya Nadella: \"Nearly 70% of the Fortune 500 now use Microsoft 365 Copilot. Customers like Vodafone, Amgen, and Cognizant are deploying tens of thousands of seats. GitHub Copilot has over 1.8 million paid subscribers, up 180% year-over-year, and Copilot Workspace is seeing rapid dev adoption. We are shifting from experimental AI copilots to autonomous multi-agent systems built on Azure AI Studio.\"",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "Analyst (Keith Weiss, Morgan Stanley): \"Amy, regarding the $20 billion quarterly capex: Can you give investors confidence that cloud and AI demand is keeping pace with this unprecedented infrastructure build-out?\"\nAmy Hood: \"Keith, our AI demand continues to exceed our available GPU and datacenter capacity. If we had more capacity available today, we would have booked higher Azure AI revenue. Every dollar of server and networking spend is tied directly to signed customer contractual workloads.\"",
+    "company": "Microsoft",
+    "ticker": "MSFT",
+    "source": "data/raw_docs/microsoft_q1_fy25_earnings.txt"
+  },
+  {
+    "text": "NVIDIA CORPORATION (NVDA) - Q3 FISCAL 2025 EARNINGS CONFERENCE CALL\nDate: November 20, 2024\nExecutives:\n- Jensen Huang, Founder and Chief Executive Officer\n- Colette Kress, Executive Vice President and Chief Financial Officer",
+    "company": "NVIDIA",
+    "ticker": "NVDA",
+    "source": "data/raw_docs/nvidia_q3_fy25_earnings.txt"
+  },
+  {
+    "text": "FINANCIAL HIGHLIGHTS & PREPARED REMARKS:\nColette Kress:\n\"Good afternoon, everyone. NVIDIA reported record revenue for the third quarter of fiscal 2025 of $35.1 billion, up 17% sequentially and up 94% from a year ago.\nData Center revenue was a record $30.8 billion, up 17% sequentially and up 112% year-on-year. Growth was driven by unprecedented demand for the NVIDIA Hopper computing platform, including H100 and H200 systems, as well as early shipments of our Blackwell architecture.\nNetworking revenue was $3.12 billion, up 20% sequentially, powered by Quantum InfiniBand and our new Spectrum-X Ethernet platform tailored for generative AI clusters.\nGaming revenue was $3.3 billion, up 15% year-on-year, driven by GeForce RTX 40 Series GPUs.\nProfessional Visualization revenue was $486 million, up 17% year-on-year.\nAutomotive revenue reached a record $449 million, up 72% year-on-year, driven by self-driving platforms and robotics partnerships.",
+    "company": "NVIDIA",
+    "ticker": "NVDA",
+    "source": "data/raw_docs/nvidia_q3_fy25_earnings.txt"
+  },
+  {
+    "text": "GAAP gross margin for the quarter was 74.6%, and non-GAAP gross margin was 75.1%.\nOperating expenses were $4.29 billion GAAP and $3.05 billion non-GAAP.\nNet income reached $19.3 billion GAAP, representing a diluted EPS of $0.78. Non-GAAP diluted EPS was $0.81.\nCash and cash equivalents, including marketable securities, stood at $38.5 billion.",
+    "company": "NVIDIA",
+    "ticker": "NVDA",
+    "source": "data/raw_docs/nvidia_q3_fy25_earnings.txt"
+  },
+  {
+    "text": "OUTLOOK & GUIDANCE FOR Q4 FISCAL 2025:\nRevenue is expected to be $37.5 billion, plus or minus 2%.\nGAAP and non-GAAP gross margins are expected to be 73.0% and 73.5%, respectively, plus or minus 50 basis points.\nWe anticipate Blackwell production shipments to begin in Q4 and ramp into fiscal 2026. Because Blackwell requires new packaging techniques and initial ramp costs, gross margins in Q4 will see a temporary slight dip into the low 70s before recovering to the mid-70s later in fiscal 2026.\nFull-year operating expenses are expected to grow in the mid-40% range.\nCapital expenditures for Q3 were approximately $1.1 billion.",
+    "company": "NVIDIA",
+    "ticker": "NVDA",
+    "source": "data/raw_docs/nvidia_q3_fy25_earnings.txt"
+  },
+  {
+    "text": "EXECUTIVE Q&A SESSION:\nAnalyst (Toshiya Hari, Goldman Sachs): \"Jensen, can you address the demand trajectory and supply constraints for Blackwell? There have been rumors regarding overheating and engineering redesigns in NVL72 racks.\"\nJensen Huang: \"Blackwell is in full production. We delivered our first customer samples in Q3, and we will ship more Blackwells this quarter than previously estimated. Demand for Blackwell is staggering; cloud service providers, sovereign AI nations, and enterprise hyperscalers are racing to build out infrastructure. Regarding server rack thermal design: Blackwell is a 208-billion transistor dual-die chip pulling up to 1,200 watts. We have engineered liquid cooling solutions across 100+ ecosystem partners. There are no fundamental thermal defects in our silicon or packaging. Every Blackwell chip we make over the next several quarters is completely sold out.\"",
+    "company": "NVIDIA",
+    "ticker": "NVDA",
+    "source": "data/raw_docs/nvidia_q3_fy25_earnings.txt"
+  },
+  {
+    "text": "Analyst (Stacy Rasgon, Bernstein): \"Colette, on gross margins, why the guidance decline to 73.5% in Q4, and when do we see margins returning to 75%?\"\nColette Kress: \"Stacy, as we transition from mature Hopper yields to brand-new Blackwell yields with complex CoWoS-L packaging, ramp-up scrap and component costs naturally press on margins. Once Blackwell reaches high-volume production in the second half of fiscal 2026, we expect gross margins to stabilize back into the mid-75% range.\"",
+    "company": "NVIDIA",
+    "ticker": "NVDA",
+    "source": "data/raw_docs/nvidia_q3_fy25_earnings.txt"
+  }
+]

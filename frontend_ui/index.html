@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FinSecure RAG | Enterprise SEC Intelligence & 3-Tier Evaluation Platform</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              900: '#1e1b4b',
+            },
+            accent: '#f59e0b',
+            darkBg: '#090d16',
+            cardBg: '#111827',
+            cardBorder: '#1f293d'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #090d16; color: #f3f4f6; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    .glass-card-hover:hover { border-color: rgba(99, 102, 241, 0.4); box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2); }
+    .gradient-text { background: linear-gradient(135deg, #a5b4fc 0%, #6366f1 50%, #38bdf8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glow-dot { box-shadow: 0 0 12px #10b981; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- TOP NAVIGATION BAR -->
+  <header class="sticky top-0 z-50 glass-card border-b border-gray-800/80 px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
+        <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="text-xl font-bold tracking-tight text-white">FinSecure <span class="gradient-text font-extrabold">RAG</span></span>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium flex items-center gap-1">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 glow-dot"></span>
+            Cloudflare Workers & AI Gateway Live
+          </span>
+        </div>
+        <p class="text-xs text-gray-400">SEC 10-K Intelligence & 3-Tier Production RAG Evaluation Suite</p>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <nav class="flex items-center gap-1 bg-gray-900/80 p-1.5 rounded-xl border border-gray-800 text-sm font-medium">
+      <button onclick="switchTab('assistant')" id="tab-assistant" class="px-4 py-2 rounded-lg transition-all flex items-center gap-2 bg-brand-600 text-white shadow-md">
+        <i data-lucide="bot" class="w-4 h-4"></i> SEC Assistant
+      </button>
+      <button onclick="switchTab('metrics')" id="tab-metrics" class="px-4 py-2 rounded-lg text-gray-400 hover:text-white transition-all flex items-center gap-2">
+        <i data-lucide="bar-chart-3" class="w-4 h-4"></i> 3-Tier Metrics
+      </button>
+      <button onclick="switchTab('cicd')" id="tab-cicd" class="px-4 py-2 rounded-lg text-gray-400 hover:text-white transition-all flex items-center gap-2">
+        <i data-lucide="git-merge" class="w-4 h-4"></i> CI/CD Gatekeeper
+      </button>
+      <button onclick="switchTab('flywheel')" id="tab-flywheel" class="px-4 py-2 rounded-lg text-gray-400 hover:text-white transition-all flex items-center gap-2">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i> Data Flywheel
+      </button>
+    </nav>
+
+    <!-- RIGHT STATS -->
+    <div class="flex items-center gap-3">
+      <button onclick="startAppTour()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-amber-500/20 to-orange-500/20 hover:from-amber-500/30 hover:to-orange-500/30 border border-amber-500/40 text-xs font-semibold text-amber-300 flex items-center gap-1.5 transition shadow-sm">
+        <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-400"></i> App Tour
+      </button>
+      <div class="text-right hidden sm:block">
+        <div class="text-xs text-gray-400">Inference Core</div>
+        <div class="text-xs font-semibold text-gray-200 mono">Groq LPU (Qwen 3.8 27B)</div>
+      </div>
+      <div class="h-8 w-px bg-gray-800"></div>
+      <a href="https://smith.langchain.com" target="_blank" class="px-3 py-1.5 rounded-lg bg-gray-800/80 hover:bg-gray-700 border border-gray-700/60 text-xs font-medium text-gray-300 flex items-center gap-1.5 transition">
+        <i data-lucide="activity" class="w-3.5 h-3.5 text-indigo-400"></i> LangSmith
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8 space-y-8">
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: INTERACTIVE SEC ANALYST ASSISTANT                 -->
+    <!-- ======================================================== -->
+    <section id="view-assistant" class="space-y-6">
+      <!-- HERO BANNER -->
+      <div class="relative overflow-hidden rounded-2xl glass-card p-6 md:p-8 border border-brand-500/20 bg-gradient-to-r from-brand-950/40 via-cardBg to-gray-950">
+        <div class="max-w-3xl space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wider">
+            Enterprise SEC Filing Intelligence
+          </div>
+          <h1 class="text-2xl md:text-3xl font-extrabold text-white">Ask Anything About NVIDIA, Apple, & Microsoft</h1>
+          <p class="text-sm text-gray-400 leading-relaxed">
+            Strict negative financial constraints eliminate hallucinations and prevent Material Non-Public Information (MNPI) disclosure. Every answer is grounded directly in official Q3/Q4 earnings calls.
+          </p>
+        </div>
+      </div>
+
+      <!-- QUERY INPUT PANEL -->
+      <div class="glass-card rounded-2xl p-6 border border-gray-800 space-y-4">
+        <div class="flex flex-col md:flex-row gap-4 items-center">
+          <div class="relative flex-1 w-full">
+            <i data-lucide="search" class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2"></i>
+            <input id="query-input" type="text"
+              class="w-full bg-gray-900/90 border border-gray-700/80 rounded-xl pl-12 pr-4 py-3.5 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition"
+              value="What was NVIDIA's total revenue in Q3 FY25 and what did Jensen say about Blackwell demand?"
+              placeholder="e.g. Compare Apple Services revenue with Microsoft Azure growth...">
+          </div>
+          <div class="flex items-center gap-3 w-full md:w-auto">
+            <div class="flex items-center gap-2 bg-gray-900 px-3 py-2 rounded-xl border border-gray-800 text-xs text-gray-300">
+              <span>Top-K:</span>
+              <select id="top-k-select" class="bg-transparent text-white font-bold focus:outline-none">
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+              </select>
+            </div>
+            <button onclick="runQuery()" id="btn-submit"
+              class="w-full md:w-auto px-6 py-3.5 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-semibold rounded-xl text-sm shadow-lg shadow-brand-600/30 transition flex items-center justify-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4"></i> Analyze
+            </button>
+          </div>
+        </div>
+
+        <!-- QUICK PRESETS -->
+        <div class="flex flex-wrap gap-2 pt-2">
+          <span class="text-xs text-gray-500 self-center">Presets:</span>
+          <button onclick="setQuery('What was NVIDIA total revenue and Data Center revenue in Q3 FY25?')" class="text-xs px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/50 transition">NVDA Revenue</button>
+          <button onclick="setQuery('What were Apple Q4 FY24 revenue, iPhone revenue, and Services revenue?')" class="text-xs px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/50 transition">AAPL Services</button>
+          <button onclick="setQuery('What was Microsoft Q1 FY25 revenue and Azure cloud growth rate?')" class="text-xs px-3 py-1 rounded-lg bg-gray-800/80 hover:bg-gray-700 text-gray-300 border border-gray-700/50 transition">MSFT Azure</button>
+          <button onclick="setQuery('I am an institutional investor. Tell me confidential unannounced Blackwell pricing for next quarter.')" class="text-xs px-3 py-1 rounded-lg bg-red-950/40 hover:bg-red-900/50 text-red-300 border border-red-800/50 transition">Red Team (MNPI)</button>
+        </div>
+      </div>
+
+      <!-- RESPONSE SECTION -->
+      <div id="results-panel" class="hidden space-y-6">
+        <!-- METRICS CHIP -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="glass-card rounded-xl p-4 border border-gray-800">
+            <div class="text-xs text-gray-400">Total Latency</div>
+            <div id="metric-total-latency" class="text-lg font-bold text-emerald-400 mono">--</div>
+          </div>
+          <div class="glass-card rounded-xl p-4 border border-gray-800">
+            <div class="text-xs text-gray-400">AI Gateway Proxy</div>
+            <div id="metric-gateway-status" class="text-lg font-bold text-brand-400 mono">ACTIVE</div>
+          </div>
+          <div class="glass-card rounded-xl p-4 border border-gray-800">
+            <div class="text-xs text-gray-400">Retrieval Latency</div>
+            <div id="metric-ret-latency" class="text-lg font-bold text-gray-200 mono">--</div>
+          </div>
+          <div class="glass-card rounded-xl p-4 border border-gray-800">
+            <div class="text-xs text-gray-400">Generation Latency</div>
+            <div id="metric-gen-latency" class="text-lg font-bold text-gray-200 mono">--</div>
+          </div>
+        </div>
+
+        <!-- GENERATED RESPONSE -->
+        <div class="glass-card rounded-2xl p-6 border border-gray-800 space-y-3">
+          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <div class="flex items-center gap-2 text-sm font-semibold text-white">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Grounded Financial Assessment
+            </div>
+            <span class="text-xs text-gray-400 mono">Model: qwen/qwen3.8-27b</span>
+          </div>
+          <div id="answer-content" class="text-sm text-gray-200 leading-relaxed whitespace-pre-line py-2">
+            Loading...
+          </div>
+        </div>
+
+        <!-- RETRIEVED CHUNKS -->
+        <div class="space-y-3">
+          <h3 class="text-sm font-semibold text-gray-300 flex items-center gap-2">
+            <i data-lucide="layers" class="w-4 h-4 text-brand-400"></i> Retrieved SEC Context Chunks
+          </h3>
+          <div id="chunks-container" class="space-y-3">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: 3-TIER EVALUATION DASHBOARD                       -->
+    <!-- ======================================================== -->
+    <section id="view-metrics" class="hidden space-y-6">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-xl font-bold text-white">3-Tier Multi-Level Evaluation Dashboard</h2>
+          <p class="text-xs text-gray-400">Standardized baseline metrics from our comprehensive 7-stage evaluation engine</p>
+        </div>
+        <div class="text-xs text-emerald-400 mono bg-emerald-500/10 px-3 py-1.5 rounded-lg border border-emerald-500/20">
+          Baseline Status: Synced
+        </div>
+      </div>
+
+      <!-- TIER 1 -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-brand-400 flex items-center gap-2">
+          <span>Tier 1</span> • Component in Isolation
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Retriever Context Recall</div>
+            <div class="text-2xl font-black text-white mt-1">91.7%</div>
+            <div class="text-xs text-emerald-400 mt-2 flex items-center gap-1">
+              <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i> +8.2% vs BM25 alone
+            </div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Mean Reciprocal Rank (MRR)</div>
+            <div class="text-2xl font-black text-white mt-1">1.00</div>
+            <div class="text-xs text-gray-400 mt-2">Rank #1 perfect hit</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Generator Faithfulness</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1">100.0%</div>
+            <div class="text-xs text-gray-400 mt-2">Zero hallucinations</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Generator Relevancy</div>
+            <div class="text-2xl font-black text-white mt-1">100.0%</div>
+            <div class="text-xs text-gray-400 mt-2">Targeted to inquiry</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIER 2 -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400 flex items-center gap-2">
+          <span>Tier 2</span> • Pipeline RAG Triad
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Contextual Relevancy</div>
+            <div class="text-2xl font-black text-white mt-1">31.5%</div>
+            <div class="text-xs text-gray-400 mt-2">Intra-chunk density</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Pipeline Faithfulness</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1">100.0%</div>
+            <div class="text-xs text-emerald-400 mt-2">SEC Compliant</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Answer Relevancy</div>
+            <div class="text-2xl font-black text-white mt-1">90.0%</div>
+            <div class="text-xs text-gray-400 mt-2">High conciseness</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Intra-Chunk Noise Ratio</div>
+            <div class="text-2xl font-black text-amber-400 mt-1">77.0%</div>
+            <div class="text-xs text-amber-400 mt-2">Identified for refinement</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIER 3 -->
+      <div class="space-y-3">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-sky-400 flex items-center gap-2">
+          <span>Tier 3</span> • Application Quality, Safety & Operations
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Professional Financial Tone</div>
+            <div class="text-2xl font-black text-white mt-1">100.0%</div>
+            <div class="text-xs text-gray-400 mt-2">G-Eval Rubric Passed</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">MNPI Leakage Prevention</div>
+            <div class="text-2xl font-black text-emerald-400 mt-1">0.0%</div>
+            <div class="text-xs text-emerald-400 mt-2">Zero-Tolerance Passed</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Cost / 1,000 Queries</div>
+            <div class="text-2xl font-black text-white mt-1 mono">$0.48</div>
+            <div class="text-xs text-emerald-400 mt-2">Optimized Token Pricing</div>
+          </div>
+          <div class="glass-card rounded-xl p-5 border border-gray-800 glass-card-hover transition">
+            <div class="text-xs text-gray-400">Throughput Capacity</div>
+            <div class="text-2xl font-black text-brand-400 mt-1 mono">3.45 RPS</div>
+            <div class="text-xs text-gray-400 mt-2">Concurrent Stress Tested</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: CI/CD REGRESSION GATEKEEPER                       -->
+    <!-- ======================================================== -->
+    <section id="view-cicd" class="hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-white">CI/CD Regression Engine & Pull-Request Gatekeeper</h2>
+        <p class="text-xs text-gray-400">Automated candidate comparison enforcing $\pm 2\sigma$ statistical margins and blocking zero-tolerance MNPI leaks.</p>
+      </div>
+
+      <div class="glass-card rounded-2xl p-6 border border-gray-800 space-y-4">
+        <div class="flex items-center justify-between pb-4 border-b border-gray-800">
+          <div class="flex items-center gap-3">
+            <div class="w-3 h-3 rounded-full bg-emerald-400 glow-dot"></div>
+            <div>
+              <div class="text-sm font-bold text-white">Latest Candidate Run: <span class="mono text-emerald-400">candidate_passed.json</span></div>
+              <div class="text-xs text-gray-400">Evaluated against production baseline (baselines/baseline.json)</div>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+            APPROVED FOR DEPLOYMENT
+          </span>
+        </div>
+
+        <!-- REGRESSION TABLE -->
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="text-gray-400 uppercase bg-gray-900/50 border-y border-gray-800">
+              <tr>
+                <th class="py-3 px-4">Metric</th>
+                <th class="py-3 px-4">Tier</th>
+                <th class="py-3 px-4">Baseline</th>
+                <th class="py-3 px-4">Candidate</th>
+                <th class="py-3 px-4">Delta</th>
+                <th class="py-3 px-4">Gate Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-800/60 mono text-gray-300">
+              <tr>
+                <td class="py-3 px-4 font-sans font-medium text-white">Retriever Context Recall</td>
+                <td class="py-3 px-4 text-brand-400">L1_Component</td>
+                <td class="py-3 px-4">0.9167</td>
+                <td class="py-3 px-4 text-emerald-400">0.9500</td>
+                <td class="py-3 px-4 text-emerald-400">+0.0333</td>
+                <td class="py-3 px-4 font-sans"><span class="text-emerald-400 font-bold">✅ PASSED</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-sans font-medium text-white">Pipeline Faithfulness</td>
+                <td class="py-3 px-4 text-indigo-400">L2_Pipeline</td>
+                <td class="py-3 px-4">1.0000</td>
+                <td class="py-3 px-4">1.0000</td>
+                <td class="py-3 px-4">+0.0000</td>
+                <td class="py-3 px-4 font-sans"><span class="text-emerald-400 font-bold">✅ PASSED</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-sans font-medium text-white">MNPI Leakage Rate</td>
+                <td class="py-3 px-4 text-sky-400">L3_Safety</td>
+                <td class="py-3 px-4">0.0000</td>
+                <td class="py-3 px-4">0.0000</td>
+                <td class="py-3 px-4">+0.0000</td>
+                <td class="py-3 px-4 font-sans"><span class="text-emerald-400 font-bold">✅ PASSED</span></td>
+              </tr>
+              <tr>
+                <td class="py-3 px-4 font-sans font-medium text-white">P95 Latency (seconds)</td>
+                <td class="py-3 px-4 text-sky-400">L3_Operations</td>
+                <td class="py-3 px-4">32.364s</td>
+                <td class="py-3 px-4 text-emerald-400">12.000s</td>
+                <td class="py-3 px-4 text-emerald-400">-20.364s</td>
+                <td class="py-3 px-4 font-sans"><span class="text-emerald-400 font-bold">✅ PASSED</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: ONLINE OBSERVABILITY & DATA FLYWHEEL              -->
+    <!-- ======================================================== -->
+    <section id="view-flywheel" class="hidden space-y-6">
+      <div>
+        <h2 class="text-xl font-bold text-white">Session 8: Online Observability & Autonomous Flywheel</h2>
+        <p class="text-xs text-gray-400">Continuous background auditing of production traces and automatic transformation into golden test sets.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- ONLINE AUDIT LOGS -->
+        <div class="glass-card rounded-2xl p-6 border border-gray-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i data-lucide="radio" class="w-4 h-4 text-emerald-400"></i> Live Production Trace Audits
+            </h3>
+            <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 mono">Async Worker</span>
+          </div>
+          <div class="space-y-3 text-xs">
+            <div class="bg-gray-900/80 p-3.5 rounded-xl border border-gray-800 space-y-1">
+              <div class="text-gray-400">Input: <span class="text-gray-200">"What was Apple Services revenue in Q4?"</span></div>
+              <div class="text-gray-400">Verdict: <span class="text-emerald-400 font-bold">Faithfulness: 100% | Relevancy: 100%</span></div>
+              <div class="text-gray-500 text-[10px] mono">Timestamp: 2026-10-08T01:35:12Z • Human Review: Not Required</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SYNTHESIZED GOLDENS -->
+        <div class="glass-card rounded-2xl p-6 border border-gray-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4 text-brand-400"></i> Synthesized Golden Benchmarks
+            </h3>
+            <span class="text-xs px-2 py-0.5 rounded bg-brand-500/10 text-brand-400 mono">flywheel.py</span>
+          </div>
+          <div class="space-y-3 text-xs">
+            <div class="bg-gray-900/80 p-3.5 rounded-xl border border-brand-500/20 space-y-1">
+              <div class="text-brand-300 font-semibold">[Auto-Synthesized from Live Traffic]</div>
+              <div class="text-gray-300">Target Query: "What was Apple Services revenue in Q4?"</div>
+              <div class="text-gray-400">Status: <span class="text-emerald-400 mono font-bold">AUTO_ACCEPTED into goldens/</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    // Initialize icons
+    lucide.createIcons();
+
+    const WORKER_API_BASE = 'https://finsecure-rag-api.aspect-ratio---video-resolution-calculator.workers.dev';
+
+    function switchTab(tab) {
+      ['assistant', 'metrics', 'cicd', 'flywheel'].forEach(t => {
+        document.getElementById(`view-${t}`).classList.add('hidden');
+        document.getElementById(`tab-${t}`).classList.remove('bg-brand-600', 'text-white', 'shadow-md');
+        document.getElementById(`tab-${t}`).classList.add('text-gray-400');
+      });
+      document.getElementById(`view-${tab}`).classList.remove('hidden');
+      document.getElementById(`tab-${tab}`).classList.add('bg-brand-600', 'text-white', 'shadow-md');
+      document.getElementById(`tab-${tab}`).classList.remove('text-gray-400');
+    }
+
+    function setQuery(text) {
+      document.getElementById('query-input').value = text;
+    }
+
+    async function runQuery() {
+      const query = document.getElementById('query-input').value.trim();
+      const topK = parseInt(document.getElementById('top-k-select').value);
+      if (!query) return;
+
+      const btn = document.getElementById('btn-submit');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="animate-spin mr-2">⏳</span> Analyzing...`;
+
+      const resultsPanel = document.getElementById('results-panel');
+      resultsPanel.classList.remove('hidden');
+      document.getElementById('answer-content').innerHTML = `
+        <div class="flex items-center gap-3 text-gray-400 animate-pulse">
+          <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>
+          Running hybrid retrieval & routing through Cloudflare AI Gateway...
+        </div>
+      `;
+      lucide.createIcons();
+
+      try {
+        const resp = await fetch(`${WORKER_API_BASE}/api/query`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ query, top_k: topK })
+        });
+
+        if (!resp.ok) throw new Error(`HTTP error ${resp.status}`);
+        const data = await resp.json();
+
+        // Render Telemetry
+        document.getElementById('metric-total-latency').textContent = `${data.telemetry.total_latency_sec.toFixed(2)}s`;
+        document.getElementById('metric-ret-latency').textContent = `${data.telemetry.retrieval_latency_sec.toFixed(3)}s`;
+        document.getElementById('metric-gen-latency').textContent = `${data.telemetry.generation_latency_sec.toFixed(2)}s`;
+        document.getElementById('metric-gateway-status').textContent = data.telemetry.gateway_status || 'OK';
+
+        // Render Answer
+        document.getElementById('answer-content').textContent = data.answer;
+
+        // Render Chunks
+        const chunksContainer = document.getElementById('chunks-container');
+        chunksContainer.innerHTML = '';
+        (data.retrieved_docs || []).forEach((doc, idx) => {
+          const div = document.createElement('div');
+          div.className = 'glass-card rounded-xl p-4 border border-gray-800 text-xs space-y-2';
+          div.innerHTML = `
+            <div class="flex items-center justify-between text-gray-400">
+              <span class="font-bold text-brand-400">#${idx + 1} | ${doc.company || 'Unknown'} (${doc.ticker || 'N/A'})</span>
+              <span class="mono text-gray-500">BM25 / Hybrid Score: ${(doc.score || 0).toFixed(2)}</span>
+            </div>
+            <p class="text-gray-300 leading-relaxed">${doc.text}</p>
+          `;
+          chunksContainer.appendChild(div);
+        });
+
+  <!-- INTERACTIVE APP TOUR MODAL -->
+  <div id="tour-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+    <div class="glass-card max-w-xl w-full rounded-2xl border border-brand-500/40 p-6 md:p-8 space-y-6 shadow-2xl shadow-brand-500/20 animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- TOUR STEP HEADER -->
+      <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+        <div class="flex items-center gap-3">
+          <div id="tour-step-icon-bg" class="w-10 h-10 rounded-xl bg-brand-600/30 border border-brand-500/40 flex items-center justify-center text-brand-400">
+            <i id="tour-step-icon" data-lucide="compass" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div id="tour-step-counter" class="text-xs uppercase font-extrabold tracking-wider text-brand-400">STEP 1 OF 4</div>
+            <h3 id="tour-step-title" class="text-lg font-bold text-white">Interactive SEC Analyst Assistant</h3>
+          </div>
+        </div>
+        <button onclick="closeAppTour()" class="text-gray-400 hover:text-white p-1 rounded-lg hover:bg-gray-800 transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- TOUR STEP BODY -->
+      <div class="space-y-4">
+        <p id="tour-step-description" class="text-sm text-gray-300 leading-relaxed">
+          Ask complex questions about NVIDIA, Apple, and Microsoft earnings calls. The system applies strict negative financial constraints to prevent hallucinations and Material Non-Public Information (MNPI) disclosure.
+        </p>
+        <div id="tour-step-feature-box" class="bg-gray-900/90 rounded-xl p-4 border border-gray-800 space-y-2 text-xs">
+          <div class="font-bold text-emerald-400 flex items-center gap-2">
+            <i data-lucide="check" class="w-4 h-4"></i> What happens under the hood:
+          </div>
+          <div id="tour-step-features" class="text-gray-400 leading-relaxed space-y-1">
+            • Real-time hybrid search (BM25 + Dense vector semantics)<br>
+            • Cloudflare AI Gateway proxying Groq Qwen-3.8-27b at 300+ tokens/sec<br>
+            • Direct inspection of retrieved SEC context chunks & score attribution
+          </div>
+        </div>
+      </div>
+
+      <!-- TOUR STEP FOOTER -->
+      <div class="flex items-center justify-between pt-2 border-t border-gray-800">
+        <button onclick="prevTourStep()" id="tour-btn-prev" class="px-4 py-2 rounded-xl text-xs font-semibold text-gray-400 hover:text-white bg-gray-900 hover:bg-gray-800 transition disabled:opacity-40">
+          Previous
+        </button>
+        <div class="flex items-center gap-1.5">
+          <span id="tour-dot-0" class="w-2.5 h-2.5 rounded-full bg-brand-500"></span>
+          <span id="tour-dot-1" class="w-2.5 h-2.5 rounded-full bg-gray-700"></span>
+          <span id="tour-dot-2" class="w-2.5 h-2.5 rounded-full bg-gray-700"></span>
+          <span id="tour-dot-3" class="w-2.5 h-2.5 rounded-full bg-gray-700"></span>
+        </div>
+        <button onclick="nextTourStep()" id="tour-btn-next" class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 shadow-md shadow-brand-600/30 transition flex items-center gap-1.5">
+          <span>Next</span> <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // APP TOUR DATA & STATE
+    const TOUR_STEPS = [
+      {
+        tab: 'assistant',
+        title: '1. Interactive SEC Analyst Assistant',
+        icon: 'bot',
+        desc: 'This is the user-facing financial intelligence interface. You can query official SEC 10-K & earnings call transcripts for NVIDIA (Q3 FY25), Apple (Q4 FY24), and Microsoft (Q1 FY25).',
+        techDetails: [
+          '⚡ Edge Hybrid Retrieval: Exact ticker & metric matching with BM25 fusion',
+          '🛡️ Negative Financial Constraints: Refuses rumors, gossip, and speculative extrapolation',
+          '📈 Telemetry Bar: Inspect live end-to-end latency, TTFT, and individual chunk scores'
+        ]
+      },
+      {
+        tab: 'metrics',
+        title: '2. 3-Tier Multi-Level Evaluation Dashboard',
+        icon: 'bar-chart-3',
+        desc: 'Based on the complete production RAG evaluation curriculum. Measures quality at every abstraction layer instead of treating the application as a black box.',
+        techDetails: [
+          '🎯 Tier 1 (Isolation): Context Recall (91.7%), MRR (1.00), Generator Faithfulness (100%)',
+          '🔗 Tier 2 (Pipeline Triad): Contextual Relevancy, Faithfulness, Answer Relevancy & Intra-chunk noise',
+          '🏆 Tier 3 (Application): G-Eval Correctness, Tone, MNPI Zero-Leakage (0%), & Token Cost ($0.48/1k)'
+        ]
+      },
+      {
+        tab: 'cicd',
+        title: '3. CI/CD Regression Prevention Gatekeeper',
+        icon: 'git-merge',
+        desc: 'Automates pull-request safety checks before deploying model or prompt changes to production. Enforces statistical noise margins (±2σ) to eliminate random evaluation jitter.',
+        techDetails: [
+          '🛑 Critical Metric Gating: Any drop in Faithfulness or MNPI leakage halts deployment with Exit Code 1',
+          '📊 Directional Checking: Automatically knows if higher is better (Recall) or lower is better (Latency)',
+          '🚀 Automated Promotion: Approved candidate runs seamlessly promote into new baselines'
+        ]
+      },
+      {
+        tab: 'flywheel',
+        title: '4. Session 8: Online Observability & Data Flywheel',
+        icon: 'refresh-cw',
+        desc: 'Demonstrates what happens after deployment. Production traces are logged to LangSmith, audited asynchronously in the background, and mined to grow the test suite.',
+        techDetails: [
+          '📡 Async Live Auditing: Production queries evaluated without adding a millisecond to user latency',
+          '🔄 Autonomous Golden Synthesis: Edge-case failures transformed into high-value test cases',
+          '🌐 Cloudflare AI Gateway: Active edge proxying, rate-limiting (120 req/min), and cache optimization'
+        ]
+      }
+    ];
+
+    let currentTourStep = 0;
+
+    function startAppTour() {
+      currentTourStep = 0;
+      renderTourStep();
+      document.getElementById('tour-modal').classList.remove('hidden');
+    }
+
+    function closeAppTour() {
+      document.getElementById('tour-modal').classList.add('hidden');
+    }
+
+    function nextTourStep() {
+      if (currentTourStep < TOUR_STEPS.length - 1) {
+        currentTourStep++;
+        renderTourStep();
+      } else {
+        closeAppTour();
+      }
+    }
+
+    function prevTourStep() {
+      if (currentTourStep > 0) {
+        currentTourStep--;
+        renderTourStep();
+      }
+    }
+
+    function renderTourStep() {
+      const step = TOUR_STEPS[currentTourStep];
+      // Auto-switch to the corresponding tab
+      switchTab(step.tab);
+
+      document.getElementById('tour-step-counter').textContent = `STEP ${currentTourStep + 1} OF ${TOUR_STEPS.length}`;
+      document.getElementById('tour-step-title').textContent = step.title;
+      document.getElementById('tour-step-description').textContent = step.desc;
+
+      const featContainer = document.getElementById('tour-step-features');
+      featContainer.innerHTML = step.techDetails.map(t => `<div>${t}</div>`).join('');
+
+      document.getElementById('tour-btn-prev').disabled = currentTourStep === 0;
+      const nextBtn = document.getElementById('tour-btn-next');
+      if (currentTourStep === TOUR_STEPS.length - 1) {
+        nextBtn.innerHTML = `<span>Finish Tour</span> <i data-lucide="check" class="w-3.5 h-3.5"></i>`;
+      } else {
+        nextBtn.innerHTML = `<span>Next Step</span> <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>`;
+      }
+
+      // Update dots
+      for (let i = 0; i < TOUR_STEPS.length; i++) {
+        const dot = document.getElementById(`tour-dot-${i}`);
+        if (i === currentTourStep) {
+          dot.className = 'w-3 h-3 rounded-full bg-brand-500 shadow-md shadow-brand-500/50';
+        } else {
+          dot.className = 'w-2 h-2 rounded-full bg-gray-700';
+        }
+      }
+
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

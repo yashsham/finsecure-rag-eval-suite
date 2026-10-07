@@ -1,0 +1,32 @@
+MICROSOFT CORPORATION (MSFT) - Q1 FISCAL 2025 FINANCIAL RESULTS & EARNINGS CALL
+Date: October 30, 2024
+Executives:
+- Satya Nadella, Chairman and Chief Executive Officer
+- Amy Hood, Executive Vice President and Chief Financial Officer
+
+FINANCIAL HIGHLIGHTS & PREPARED REMARKS:
+Amy Hood:
+"Good day. For the first quarter of fiscal 2025, Microsoft delivered revenue of $65.6 billion, up 16% year-over-year.
+Operating income was $30.6 billion, up 14% year-over-year.
+Net income was $24.7 billion, and diluted earnings per share was $3.30, an increase of 10%.
+
+Segment Breakdown:
+1. Productivity and Business Processes revenue was $28.3 billion, up 12%. Office 365 Commercial revenue grew 15%, driven by E5 expansions and early Microsoft 365 Copilot seat activations. LinkedIn revenue grew 10%.
+2. Intelligent Cloud revenue was $24.1 billion, up 20%. Azure and other cloud services revenue grew 33%, with 12 points of growth coming directly from AI services demand.
+3. More Personal Computing revenue was $13.2 billion, up 17%. Windows OEM and commercial revenue grew 2%, and Xbox content and services revenue grew 61%, largely due to the net impact of the Activision Blizzard acquisition.
+
+CAPITAL EXPENDITURES & AI INFRASTRUCTURE:
+Capital expenditures including finance leases were $20.0 billion, with cash paid for property, plant, and equipment of $14.9 billion. Roughly half of our cloud capex was spent on long-lived assets, including data center land, power build-outs, and fiber that will monetize over 15+ years. The remaining half was allocated to servers, GPUs, and network switches directly matching customer demand curves.
+Operating cash flow was $34.2 billion, up 12%. Free cash flow was $19.3 billion.
+
+OUTLOOK & GUIDANCE FOR Q2 FISCAL 2025:
+Intelligent Cloud revenue is guided to $25.55 billion to $25.85 billion, representing 18% to 20% growth. Azure growth in Q2 is expected to be between 31% and 32% in constant currency.
+We expect cloud supply constraints to persist through the first half of the fiscal year, with capacity improving in the second half as new third-party and internal data centers go live.
+Capex will increase sequentially as we invest in AI cloud infrastructure.
+
+EXECUTIVE Q&A SESSION:
+Analyst (Brent Thill, Jefferies): "Satya, can you update us on GitHub Copilot and M365 Copilot enterprise monetization? What percentage of Fortune 500 customers are actively deploying Copilot?"
+Satya Nadella: "Nearly 70% of the Fortune 500 now use Microsoft 365 Copilot. Customers like Vodafone, Amgen, and Cognizant are deploying tens of thousands of seats. GitHub Copilot has over 1.8 million paid subscribers, up 180% year-over-year, and Copilot Workspace is seeing rapid dev adoption. We are shifting from experimental AI copilots to autonomous multi-agent systems built on Azure AI Studio."
+
+Analyst (Keith Weiss, Morgan Stanley): "Amy, regarding the $20 billion quarterly capex: Can you give investors confidence that cloud and AI demand is keeping pace with this unprecedented infrastructure build-out?"
+Amy Hood: "Keith, our AI demand continues to exceed our available GPU and datacenter capacity. If we had more capacity available today, we would have booked higher Azure AI revenue. Every dollar of server and networking spend is tied directly to signed customer contractual workloads."

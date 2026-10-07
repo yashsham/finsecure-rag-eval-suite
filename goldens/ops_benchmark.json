@@ -1,0 +1,7 @@
+[
+  {"id": "ops_001", "query": "What was NVIDIA Q3 revenue?", "tier": "low"},
+  {"id": "ops_002", "query": "What was Microsoft Azure growth rate and Capex?", "tier": "medium"},
+  {"id": "ops_003", "query": "Detail Apple Services growth and iOS 18.1 adoption rate compared to previous years.", "tier": "medium"},
+  {"id": "ops_004", "query": "Synthesize the competitive landscape between NVIDIA Blackwell ramping and Microsoft AI infrastructure spend.", "tier": "high"},
+  {"id": "ops_005", "query": "Explain Apple gross margin guidance for next quarter.", "tier": "low"}
+]

@@ -1,0 +1,71 @@
+[
+  {
+    "id": "ret_001",
+    "query": "What was NVIDIA total revenue and Data Center revenue in Q3 FY25?",
+    "company": "NVIDIA",
+    "golden_facts": [
+      "$35.1 billion total revenue",
+      "94% year-over-year increase",
+      "$30.8 billion Data Center revenue",
+      "112% increase from a year ago"
+    ],
+    "expected_keywords": ["35.1", "30.8", "Data Center", "94%"]
+  },
+  {
+    "id": "ret_002",
+    "query": "What did Jensen Huang state regarding Blackwell chip demand and shipments?",
+    "company": "NVIDIA",
+    "golden_facts": [
+      "Blackwell production is in full steam",
+      "delivering more Blackwells this quarter than previously estimated",
+      "demand for Blackwell is staggering",
+      "every customer is racing to be first to market"
+    ],
+    "expected_keywords": ["Blackwell", "full steam", "staggering", "racing"]
+  },
+  {
+    "id": "ret_003",
+    "query": "What were Apple Q4 FY24 revenue, iPhone revenue, and Services revenue?",
+    "company": "Apple",
+    "golden_facts": [
+      "$94.9 billion total revenue, up 6% year-over-year",
+      "$46.22 billion iPhone revenue, up 6%",
+      "$24.97 billion Services revenue, all-time record, up 12%"
+    ],
+    "expected_keywords": ["94.9", "46.22", "24.97", "Services"]
+  },
+  {
+    "id": "ret_004",
+    "query": "What did Tim Cook say about Apple Intelligence and user engagement?",
+    "company": "Apple",
+    "golden_facts": [
+      "Apple Intelligence marks beginning of a new chapter",
+      "adoption rate of iOS 18.1 is double iOS 17.1 over the same time frame",
+      "users are adopting features like Writing Tools and Clean Up in Photos"
+    ],
+    "expected_keywords": ["Apple Intelligence", "iOS 18.1", "double", "Writing Tools"]
+  },
+  {
+    "id": "ret_005",
+    "query": "What was Microsoft Q1 FY25 revenue and Azure cloud growth rate?",
+    "company": "Microsoft",
+    "golden_facts": [
+      "$65.6 billion revenue, up 16%",
+      "Azure and other cloud services revenue grew 33%",
+      "12 points from AI services"
+    ],
+    "expected_keywords": ["65.6", "Azure", "33%", "12 points"]
+  },
+  {
+    "id": "ret_006",
+    "query": "What was Microsoft capital expenditure and guidance on AI capacity constraints?",
+    "company": "Microsoft",
+    "golden_facts": [
+      "Capital expenditures including finance leases were $20.0 billion",
+      "cash paid for PP&E was $14.9 billion",
+      "cloud demand continues to be higher than available capacity",
+      "expect capacity constraints to continue through first half of fiscal year"
+    ],
+    "expected_keywords": ["20.0 billion", "capacity", "constraints", "first half"]
+  }
+]
