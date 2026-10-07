@@ -46,8 +46,58 @@ function bm25Retrieve(query, topK = 3) {
   return scored.slice(0, topK);
 }
 
+// Asynchronously stream nested traces to LangSmith
+async function logToLangSmith(env, traceData) {
+  const apiKey = env.LANGSMITH_API_KEY;
+  if (!apiKey) return;
+
+  const runId = crypto.randomUUID();
+  const startTime = new Date(traceData.startTime).toISOString();
+  const endTime = new Date(traceData.endTime).toISOString();
+  const projectName = env.LANGSMITH_PROJECT || "RAG-EVAL-PROJECT";
+
+  try {
+    // 1. Post parent chain run
+    const postPayload = {
+      id: runId,
+      name: "finsecure_rag_production_query",
+      run_type: "chain",
+      session_name: projectName,
+      inputs: { query: traceData.query },
+      outputs: { 
+        answer: traceData.answer,
+        retrieved_chunks_count: traceData.retrieved.length
+      },
+      start_time: startTime,
+      end_time: endTime,
+      extra: {
+        metadata: {
+          client: "cloudflare_pages_web_app",
+          ai_gateway: env.AI_GATEWAY_ID || "finsecure-gateway",
+          retrieval_latency_sec: traceData.retrievalLatency,
+          generation_latency_sec: traceData.generationLatency,
+          total_latency_sec: traceData.totalLatency
+        }
+      }
+    };
+
+    const resp = await fetch("https://api.smith.langchain.com/runs", {
+      method: "POST",
+      headers: {
+        "x-api-key": apiKey,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(postPayload)
+    });
+
+    console.log("LangSmith trace published:", resp.status);
+  } catch (err) {
+    console.error("LangSmith background logging error:", err);
+  }
+}
+
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
     // CORS Headers
@@ -79,15 +129,15 @@ export default {
 
     // Route: RAG Query via Cloudflare AI Gateway + Groq LPU
     if (url.pathname === "/api/query" && request.method === "POST") {
-      const startTime = Date.now();
+      const startMs = Date.now();
       const body = await request.json().catch(() => ({}));
       const query = body.query || "What was NVIDIA revenue?";
       const topK = body.top_k || 3;
 
       // 1. Hybrid / Lexical Retrieval inside Worker
-      const retrievalStart = Date.now();
+      const retrievalStartMs = Date.now();
       const retrieved = bm25Retrieve(query, topK);
-      const retrievalLatency = (Date.now() - retrievalStart) / 1000;
+      const retrievalLatency = (Date.now() - retrievalStartMs) / 1000;
 
       const contextText = retrieved.map(r => `[Source: ${r.company} (${r.ticker})]\\n${r.text}`).join("\\n\\n---\\n\\n");
 
@@ -98,7 +148,7 @@ export default {
 
       const gatewayUrl = `https://gateway.ai.cloudflare.com/v1/${accountId}/${gatewayId}/groq/openai/v1/chat/completions`;
 
-      const genStart = Date.now();
+      const genStartMs = Date.now();
       let answer = "";
       let gatewayStatus = "OK";
 
@@ -133,8 +183,34 @@ export default {
         answer = `Error connecting to Cloudflare AI Gateway: ${err.message}`;
       }
 
-      const genLatency = (Date.now() - genStart) / 1000;
-      const totalLatency = (Date.now() - startTime) / 1000;
+      const endMs = Date.now();
+      const genLatency = (endMs - genStartMs) / 1000;
+      const totalLatency = (endMs - startMs) / 1000;
+
+      // Log trace to LangSmith asynchronously via ctx.waitUntil (Zero user latency)
+      if (ctx && ctx.waitUntil) {
+        ctx.waitUntil(logToLangSmith(env, {
+          query,
+          answer,
+          retrieved,
+          startTime: startMs,
+          endTime: endMs,
+          retrievalLatency,
+          generationLatency: genLatency,
+          totalLatency
+        }));
+      } else {
+        logToLangSmith(env, {
+          query,
+          answer,
+          retrieved,
+          startTime: startMs,
+          endTime: endMs,
+          retrievalLatency,
+          generationLatency: genLatency,
+          totalLatency
+        });
+      }
 
       return new Response(JSON.stringify({
         query,
@@ -145,7 +221,8 @@ export default {
           retrieval_latency_sec: retrievalLatency,
           generation_latency_sec: genLatency,
           ai_gateway_endpoint: gatewayUrl,
-          gateway_status: gatewayStatus
+          gateway_status: gatewayStatus,
+          langsmith_traced: true
         }
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" }
@@ -163,4 +240,4 @@ export default {
 with open(BASE_DIR / 'cloudflare_worker' / 'worker.js', 'w', encoding='utf-8') as f:
     f.write(worker_code)
 
-print("Generated cloudflare_worker/worker.js successfully!")
+print("Generated cloudflare_worker/worker.js with direct LangSmith tracing successfully!")
