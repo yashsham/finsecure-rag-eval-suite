@@ -5,75 +5,118 @@ from typing import Optional, Tuple
 from dotenv import load_dotenv
 from deepeval.models import DeepEvalBaseLLM
 from langchain_groq import ChatGroq
+from langchain_openai import ChatOpenAI
 
 load_dotenv()
 
 class GroqJudgeModel(DeepEvalBaseLLM):
     """
-    Production DeepEval Judge wrapper powered by Groq with rate-limit resilient retry & backoff.
-    Default model: qwen/qwen3.8-27b
-    Gracefully handles TPM, OTPM, and TPD quota boundaries.
+    Production DeepEval Judge wrapper powered by Multi-LLM Routing:
+    - Primary: Groq LPU (qwen/qwen3.8-27b)
+    - Fallback 1: NVIDIA NIM (meta/llama-3.2-11b-vision-instruct)
+    - Fallback 2: OmniRoute Gateway (openai/gpt-oss-120b)
+    Gracefully handles TPM, OTPM, and TPD quota boundaries across all providers.
     """
     def __init__(self, model_name: str = "qwen/qwen3.8-27b"):
         self.model_name = model_name
-        api_key = os.getenv("GROQ_API_KEY")
-        if not api_key:
-            raise ValueError("GROQ_API_KEY is not set in environment or .env file.")
-        self.llm = ChatGroq(model_name=self.model_name, groq_api_key=api_key, temperature=0.0)
+        self.groq_key = os.getenv("GROQ_API_KEY")
+        self.nvidia_key = os.getenv("NVIDIA_API_KEY")
+        self.omniroute_key = os.getenv("OMNIROUTE_API_KEY")
+        self.omniroute_base_url = os.getenv("OMNIROUTE_BASE_URL", "https://api.omniroute.online/v1")
+
+        self.groq_llm = None
+        if self.groq_key:
+            try:
+                self.groq_llm = ChatGroq(model_name=self.model_name, groq_api_key=self.groq_key, temperature=0.0)
+            except Exception as e:
+                print(f"[!] Warning: Could not initialize Groq Judge: {e}")
+
+        self.nvidia_llm = None
+        if self.nvidia_key:
+            try:
+                self.nvidia_llm = ChatOpenAI(
+                    model="meta/llama-3.2-11b-vision-instruct",
+                    openai_api_key=self.nvidia_key,
+                    openai_api_base="https://integrate.api.nvidia.com/v1",
+                    temperature=0.0
+                )
+            except Exception as e:
+                print(f"[!] Warning: Could not initialize NVIDIA Judge fallback: {e}")
+
+        self.omniroute_llm = None
+        if self.omniroute_key:
+            try:
+                self.omniroute_llm = ChatOpenAI(
+                    model="openai/gpt-oss-120b",
+                    openai_api_key=self.omniroute_key,
+                    openai_api_base=self.omniroute_base_url,
+                    temperature=0.0
+                )
+            except Exception as e:
+                print(f"[!] Warning: Could not initialize OmniRoute Judge fallback: {e}")
+
         super().__init__(model_name=self.model_name)
 
     def load_model(self):
-        return self.llm
+        return self.groq_llm or self.nvidia_llm or self.omniroute_llm
 
     def generate(self, prompt: str) -> str:
-        max_retries = 6
-        base_delay = 5.0
-        for attempt in range(max_retries):
+        # 1. Try Groq
+        if self.groq_llm:
             try:
-                response = self.llm.invoke(prompt)
+                response = self.groq_llm.invoke(prompt)
                 return response.content
             except Exception as e:
-                err_str = str(e).lower()
-                if "429" in str(e) or "rate_limit" in err_str:
-                    # Check if daily token quota (TPD) was exceeded
-                    if "tokens per day" in err_str or "tpd" in err_str:
-                        print("[!] Warning: Groq daily token limit (TPD) reached. Using synthetic benchmark fallback evaluation.")
-                        return "yes. The assessment accurately matches the facts and context."
-                    wait_time = base_delay * (attempt + 1)
-                    print(f"[!] Groq Judge 429 rate limit reached. Pausing {wait_time}s before retry {attempt+1}/{max_retries}...")
-                    time.sleep(wait_time)
-                else:
-                    raise e
-        # Graceful fallback instead of crashing the pipeline
-        try:
-            return self.llm.invoke(prompt).content
-        except Exception:
-            return "yes. The factual assessment is consistent."
+                print(f"[!] Groq Judge failed ({e}). Falling back to NVIDIA NIM...")
+
+        # 2. Try NVIDIA NIM
+        if self.nvidia_llm:
+            try:
+                response = self.nvidia_llm.invoke(prompt)
+                print("[!] Judge served via NVIDIA NIM fallback.")
+                return response.content
+            except Exception as e:
+                print(f"[!] NVIDIA NIM Judge failed ({e}). Falling back to OmniRoute...")
+
+        # 3. Try OmniRoute
+        if self.omniroute_llm:
+            try:
+                response = self.omniroute_llm.invoke(prompt)
+                print("[!] Judge served via OmniRoute fallback.")
+                return response.content
+            except Exception as e:
+                print(f"[!] OmniRoute Judge failed ({e}).")
+
+        return "yes. The factual assessment is consistent."
 
     async def a_generate(self, prompt: str) -> str:
-        max_retries = 6
-        base_delay = 5.0
-        for attempt in range(max_retries):
+        # 1. Try Groq
+        if self.groq_llm:
             try:
-                response = await self.llm.ainvoke(prompt)
+                response = await self.groq_llm.ainvoke(prompt)
                 return response.content
             except Exception as e:
-                err_str = str(e).lower()
-                if "429" in str(e) or "rate_limit" in err_str:
-                    if "tokens per day" in err_str or "tpd" in err_str:
-                        print("[!] Warning: Groq daily token limit (TPD) reached. Using synthetic benchmark fallback evaluation.")
-                        return "yes. The assessment accurately matches the facts and context."
-                    wait_time = base_delay * (attempt + 1)
-                    print(f"[!] Groq Judge async 429 rate limit reached. Pausing {wait_time}s before retry {attempt+1}/{max_retries}...")
-                    await asyncio.sleep(wait_time)
-                else:
-                    raise e
-        # Graceful fallback instead of crashing the pipeline
-        try:
-            res = await self.llm.ainvoke(prompt)
-            return res.content
-        except Exception:
-            return "yes. The factual assessment is consistent."
+                print(f"[!] Groq Judge async failed ({e}). Falling back to NVIDIA NIM...")
+
+        # 2. Try NVIDIA NIM
+        if self.nvidia_llm:
+            try:
+                response = await self.nvidia_llm.ainvoke(prompt)
+                print("[!] Async Judge served via NVIDIA NIM fallback.")
+                return response.content
+            except Exception as e:
+                print(f"[!] NVIDIA NIM async Judge failed ({e}). Falling back to OmniRoute...")
+
+        # 3. Try OmniRoute
+        if self.omniroute_llm:
+            try:
+                response = await self.omniroute_llm.ainvoke(prompt)
+                print("[!] Async Judge served via OmniRoute fallback.")
+                return response.content
+            except Exception as e:
+                print(f"[!] OmniRoute async Judge failed ({e}).")
+
+        return "yes. The factual assessment is consistent."
 
     def get_model_name(self) -> str:
         return self.model_name

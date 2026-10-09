@@ -169,7 +169,7 @@
             <div class="flex items-center gap-2 text-sm font-semibold text-white">
               <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Grounded Financial Assessment
             </div>
-            <span class="text-xs text-gray-400 mono">Model: qwen/qwen3.8-27b</span>
+            <span id="active-provider-badge" class="text-xs text-brand-300 bg-brand-950/60 border border-brand-800/50 px-2.5 py-1 rounded-md mono">Provider: Hybrid Multi-LLM</span>
           </div>
           <div id="answer-content" class="text-sm text-gray-200 leading-relaxed whitespace-pre-line py-2">
             Loading...
@@ -506,6 +506,11 @@
         document.getElementById('metric-ret-latency').textContent = `${data.telemetry.retrieval_latency_sec.toFixed(3)}s`;
         document.getElementById('metric-gen-latency').textContent = `${data.telemetry.generation_latency_sec.toFixed(2)}s`;
         document.getElementById('metric-gateway-status').textContent = data.telemetry.gateway_status || 'OK';
+
+        const providerBadge = document.getElementById('active-provider-badge');
+        if (providerBadge && data.telemetry.provider_used) {
+          providerBadge.textContent = `Provider: ${data.telemetry.provider_used}`;
+        }
 
         // Render Answer
         document.getElementById('answer-content').textContent = data.answer;

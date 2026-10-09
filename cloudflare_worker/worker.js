@@ -508,6 +508,7 @@ async function logToLangSmith(env, traceData) {
         metadata: {
           client: "cloudflare_pages_web_app",
           ai_gateway: env.AI_GATEWAY_ID || "finsecure-gateway",
+          provider_used: traceData.providerUsed,
           retrieval_latency_sec: traceData.retrievalLatency,
           generation_latency_sec: traceData.generationLatency,
           total_latency_sec: traceData.totalLatency
@@ -575,46 +576,123 @@ export default {
 
       const contextText = retrieved.map(r => `[Source: ${r.company} (${r.ticker})]\n${r.text}`).join("\n\n---\n\n");
 
-      // 2. Inference via Cloudflare AI Gateway proxy to Groq
+      // 2. Multi-Provider Hybrid Inference (Groq LPU -> NVIDIA NIM -> OmniRoute)
       const accountId = env.CLOUDFLARE_ACCOUNT_ID || "4d39902ff31c1ac0bb2ef2ec2c637864";
       const gatewayId = env.AI_GATEWAY_ID || "finsecure-gateway";
       const groqKey = env.GROQ_API_KEY;
+      const nvidiaKey = env.NVIDIA_API_KEY;
+      const omnirouteKey = env.OMNIROUTE_API_KEY;
+      const omnirouteBaseUrl = env.OMNIROUTE_BASE_URL || "https://api.omniroute.online/v1";
 
       const gatewayUrl = `https://gateway.ai.cloudflare.com/v1/${accountId}/${gatewayId}/groq/openai/v1/chat/completions`;
 
       const genStartMs = Date.now();
       let answer = "";
+      let providerUsed = "None";
       let gatewayStatus = "OK";
 
-      try {
-        const aiResp = await fetch(gatewayUrl, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${groqKey}`,
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-          },
-          body: JSON.stringify({
-            model: "qwen/qwen3.8-27b",
-            temperature: 0.0,
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              { role: "user", content: `<sec_filing_context>\n${contextText}\n</sec_filing_context>\n\n<analyst_question>\n${query}\n</analyst_question>\n\nProvide a rigorous, concise, and faithful financial assessment:` }
-            ],
-            max_tokens: 500
-          })
-        });
+      // Step 2a: Try Primary (Groq via Cloudflare AI Gateway)
+      if (groqKey) {
+        try {
+          const aiResp = await fetch(gatewayUrl, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${groqKey}`,
+              "Content-Type": "application/json",
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+            body: JSON.stringify({
+              model: "qwen/qwen3.8-27b",
+              temperature: 0.0,
+              messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "user", content: `<sec_filing_context>\n${contextText}\n</sec_filing_context>\n\n<analyst_question>\n${query}\n</analyst_question>\n\nProvide a rigorous, concise, and faithful financial assessment:` }
+              ],
+              max_tokens: 500
+            })
+          });
 
-        if (!aiResp.ok) {
-          const errText = await aiResp.text();
-          throw new Error(`Gateway returned ${aiResp.status}: ${errText}`);
+          if (aiResp.ok) {
+            const aiData = await aiResp.json();
+            answer = aiData.choices[0]?.message?.content || "";
+            providerUsed = "Groq LPU (qwen/qwen3.8-27b) via Cloudflare AI Gateway";
+          } else {
+            console.warn("Groq Gateway returned error:", aiResp.status);
+          }
+        } catch (err) {
+          console.warn("Groq Gateway fetch error:", err.message);
         }
+      }
 
-        const aiData = await aiResp.json();
-        answer = aiData.choices[0]?.message?.content || "No response generated.";
-      } catch (err) {
-        gatewayStatus = "FALLBACK_DIRECT";
-        answer = `Error connecting to Cloudflare AI Gateway: ${err.message}`;
+      // Step 2b: Fallback 1 to Secondary (NVIDIA NIM GPU)
+      if (!answer && nvidiaKey) {
+        try {
+          console.log("Triggering fallback to NVIDIA NIM...");
+          const nvResp = await fetch("https://integrate.api.nvidia.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${nvidiaKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "meta/llama-3.2-11b-vision-instruct",
+              temperature: 0.0,
+              messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "user", content: `<sec_filing_context>\n${contextText}\n</sec_filing_context>\n\n<analyst_question>\n${query}\n</analyst_question>\n\nProvide a rigorous, concise, and faithful financial assessment:` }
+              ],
+              max_tokens: 500
+            })
+          });
+
+          if (nvResp.ok) {
+            const nvData = await nvResp.json();
+            answer = nvData.choices[0]?.message?.content || "";
+            providerUsed = "NVIDIA NIM (meta/llama-3.2-11b-vision-instruct)";
+            gatewayStatus = "FALLBACK_NVIDIA";
+          } else {
+            console.warn("NVIDIA NIM returned error:", nvResp.status);
+          }
+        } catch (err) {
+          console.warn("NVIDIA NIM fetch error:", err.message);
+        }
+      }
+
+      // Step 2c: Fallback 2 to Tertiary (OmniRoute Gateway)
+      if (!answer && omnirouteKey) {
+        try {
+          console.log("Triggering fallback to OmniRoute Gateway...");
+          const omniResp = await fetch(`${omnirouteBaseUrl}/chat/completions`, {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${omnirouteKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: "openai/gpt-oss-120b",
+              temperature: 0.0,
+              messages: [
+                { role: "system", content: SYSTEM_PROMPT },
+                { role: "user", content: `<sec_filing_context>\n${contextText}\n</sec_filing_context>\n\n<analyst_question>\n${query}\n</analyst_question>\n\nProvide a rigorous, concise, and faithful financial assessment:` }
+              ],
+              max_tokens: 500
+            })
+          });
+
+          if (omniResp.ok) {
+            const omniData = await omniResp.json();
+            answer = omniData.choices[0]?.message?.content || "";
+            providerUsed = "OmniRoute Gateway (openai/gpt-oss-120b)";
+            gatewayStatus = "FALLBACK_OMNIROUTE";
+          }
+        } catch (err) {
+          console.warn("OmniRoute fetch error:", err.message);
+        }
+      }
+
+      if (!answer) {
+        answer = "Error: All multi-provider LLM gateways (Groq, NVIDIA NIM, OmniRoute) were unreachable or exhausted limits.";
+        gatewayStatus = "ERROR";
       }
 
       const endMs = Date.now();
@@ -629,6 +707,7 @@ export default {
           retrieved,
           startTime: startMs,
           endTime: endMs,
+          providerUsed,
           retrievalLatency,
           generationLatency: genLatency,
           totalLatency
@@ -640,6 +719,7 @@ export default {
           retrieved,
           startTime: startMs,
           endTime: endMs,
+          providerUsed,
           retrievalLatency,
           generationLatency: genLatency,
           totalLatency
@@ -654,6 +734,7 @@ export default {
           total_latency_sec: totalLatency,
           retrieval_latency_sec: retrievalLatency,
           generation_latency_sec: genLatency,
+          provider_used: providerUsed,
           ai_gateway_endpoint: gatewayUrl,
           gateway_status: gatewayStatus,
           langsmith_traced: true
